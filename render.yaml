@@ -1,0 +1,20 @@
+databases:
+  - name: modeller
+    databaseName: modeller
+    user: modeller
+
+services:
+  - type: web
+    name: modeller
+    env: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn modeller.wsgi:application"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: modeller
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: WEB_CONCURRENCY
+        value: 4
